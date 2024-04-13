@@ -5,7 +5,7 @@ const cardsTemplate = document.querySelector('#card-template').content;
 const placesList = document.querySelector('.places__list');
 
 // @todo: Функция создания карточки
-const addCard = (name, link, removeCard) => {
+const createCard = (name, link, removeCard) => {
   const placesItem = cardsTemplate.cloneNode(true);
   const deleteButton = placesItem.querySelector('.card__delete-button');
   placesItem.querySelector('.card__image').src = link;
@@ -14,9 +14,8 @@ const addCard = (name, link, removeCard) => {
   deleteButton.addEventListener('click', (event) => {
     removeCard(event);
   });
-// по логике, в будущем при реализации добавления карточки, она должна добавляться 
-// в начале страницы, а не в конце(reference - instagram, VK)
-  return placesList.prepend(placesItem);
+
+  return placesItem;
 }
 // @todo: Функция удаления карточки
 const removeCard = (event) => {
@@ -25,5 +24,5 @@ const removeCard = (event) => {
 }
 // @todo: Вывести карточки на страницу
 initialCards.forEach((item) => {
-  addCard(item.name, item.link, removeCard);
+  placesList.append(createCard(item.name, item.link, removeCard));
 })
