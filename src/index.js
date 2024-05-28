@@ -23,7 +23,7 @@ const imageItem = document.querySelector('.popup__image');
 const imagePopup = document.querySelector('.popup_type_image');
 const imageCaption = document.querySelector('.popup__caption');
 
-const handleFormSubmit = (event) => {
+const handleProfileFormSubmit = (event) => {
   event.preventDefault()
   profileNameContent.textContent = profileNameInput.value;
   profileJobContent.textContent = profileJobInput.value;
@@ -37,7 +37,7 @@ profileEditButton.addEventListener('click', () => {
 })
 
 profilePopup.addEventListener('click', handleClick);
-profileForm.addEventListener('submit', handleFormSubmit);
+profileForm.addEventListener('submit',  handleProfileFormSubmit);
 
 const addCard = (element) => {
   placesList.append(getCard(element, removeCard, likeCard, openImage));

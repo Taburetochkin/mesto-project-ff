@@ -6,17 +6,17 @@ const handleEscape = (event) => {
 
 const handleClick = (event) => {
   if (event.target.closest('.popup__close')) {
-    return closeModal(event.target.closest('.popup'));
+    closeModal(event.target.closest('.popup'));
   }
   
   if (event.target.classList.contains('popup_is-opened')) {
-    return closeModal(event.target);
+    closeModal(event.target);
   }
 };
 
 const openModal = (element) => {
   element.classList.add('popup_is-opened');
-  window.addEventListener('keydown', handleEscape);
+  document.addEventListener('keydown', handleEscape);
 }
 
 const closeModal = (element) => {
