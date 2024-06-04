@@ -10,7 +10,6 @@ const placesList = document.querySelector('.places__list');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const profilePopup = document.querySelector('.popup_type_edit');
 const profileForm = document.forms['edit-profile'];
-const profilePopupButton = profileForm.querySelector('.popup__button');
 const profileNameInput = profileForm.elements.name;
 const profileJobInput = profileForm.elements.description;
 const profileNameContent = document.querySelector('.profile__title');
@@ -19,13 +18,11 @@ const profileJobContent = document.querySelector('.profile__description');
 const userImageButton = document.querySelector('.profile__image_overlay')
 const userImagePopup = document.querySelector('.popup_type_user-image');
 const userImageForm = document.forms['edit-user-image'];
-const userImagePopupButton = userImageForm.querySelector('.popup__button');
 const userImage = document.querySelector('.profile__image'); 
 
 const cardAddButton = document.querySelector('.profile__add-button');
 const cardPopup = document.querySelector('.popup_type_new-card');
 const cardForm = document.forms['new-place'];
-const cardPopupButton = cardForm.querySelector('.popup__button');
 const cardNameInput = document.querySelector('.popup__input_type_card-name'); 
 const cardLinkInput = document.querySelector('.popup__input_type_url');
 
@@ -46,10 +43,10 @@ const validationConfig = {
 
 const showLoading = (isLoading, buttonElement) => {
   if (isLoading){
-    buttonElement.textcontent = 'Сохранение...';
+    buttonElement.innerHTML = 'Сохранение...';
   }
   else {
-    buttonElement.textcontent ='Сохранить';
+    buttonElement.innerHTML ='Сохранить';
   }
 }
 
@@ -58,12 +55,12 @@ const showCards = (element, removeCard, likeCard, openImage, userId) => {
   placesList.append(cardElement);
 }
 
-const newProfilePopup = (formElement, name, description) => {
+const setProfilePopup = (formElement, name, description) => {
   formElement.name.value = name;
   formElement.description.value = description;
 }
 
-const newProfileData = (userData) => {
+const setProfileData = (userData) => {
   profileNameContent.textContent = userData.name;
   profileJobContent.textContent = userData.about;
   userImage.style.backgroundImage = `url(${userData.avatar})`;
@@ -71,16 +68,16 @@ const newProfileData = (userData) => {
 }
 
 const handleProfileFormSubmit = (event) => {
-  event.preventDefault()
+  event.preventDefault();
+  const profilePopupButton = profileForm.querySelector('.popup__button');
   showLoading(true, profilePopupButton);
   updateUserData({
     name: profileNameInput.value,
     about: profileJobInput.value
   })
   .then((updateProfile) => {
-    newProfileData(updateProfile);
+    setProfileData(updateProfile);
     closeModal(profilePopup);
-    clearValidation(profileForm, validationConfig);
   })
   .catch((error) => {
     console.log(error);
@@ -92,7 +89,7 @@ const handleProfileFormSubmit = (event) => {
 
 profileEditButton.addEventListener('click', (event) => {
   clearValidation(profileForm, validationConfig);
-  newProfilePopup(profileForm, profileNameContent.textContent, profileJobContent.textContent);
+  setProfilePopup(profileForm, profileNameContent.textContent, profileJobContent.textContent);
   openModal(profilePopup);
 })
 
@@ -101,10 +98,11 @@ profileForm.addEventListener('submit', handleProfileFormSubmit);
 
 const handleUserImageFormSubmit = (event) => {
   event.preventDefault();
+  const userImagePopupButton = userImageForm.querySelector('.popup__button');
   showLoading(true, userImagePopupButton);
   updateUserImage(userImageForm.link.value)
   .then((updateProfile) => {
-    newProfileData(updateProfile);
+    setProfileData(updateProfile);
     closeModal(userImagePopup);
   })
   .catch((error) => {
@@ -131,6 +129,7 @@ cardPopup.addEventListener('click', handleClick);
 
 const handleNewCardFormSubmit = (event) => {
   event.preventDefault();
+  const cardPopupButton = cardForm.querySelector('.popup__button');
   showLoading(true, cardPopupButton);
   const name = cardNameInput.value;
   const link = cardLinkInput.value;
@@ -140,7 +139,6 @@ const handleNewCardFormSubmit = (event) => {
     placesList.prepend(newCard);
     closeModal(cardPopup);
     cardForm.reset();
-    clearValidation(cardForm, validationConfig);
   })
   .catch((error) => {
     console.log(error);
@@ -160,7 +158,7 @@ cardAddButton.addEventListener('click', () => {
 
 Promise.all([getUserData(), getInitialCards()])
 .then(([userData, element]) => {
-  newProfileData(userData);
+  setProfileData(userData);
   element.forEach((cardElement) => {
     showCards(cardElement, removeCard, likeCard, openImage, userId);
   })
